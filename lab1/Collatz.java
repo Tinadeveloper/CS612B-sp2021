@@ -5,13 +5,17 @@ public class Collatz {
 
     /** Buggy implementation of nextNumber! */
     public static int nextNumber(int n) {
-        if (n  == 128) {
-            return 1;
-        } else if (n == 5) {
-            return 3 * n + 1;
-        } else {
-            return n * 2;
+        int nextNumber;
+        if (n == 1) {
+            nextNumber = 1;
         }
+        else if (n % 2 == 1) {
+            nextNumber = 3 * n + 1;
+        }
+        else {
+            nextNumber = n/2;
+        }
+        return nextNumber;
     }
 
     public static void main(String[] args) {
