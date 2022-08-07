@@ -114,6 +114,7 @@ public class Model extends Observable {
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
 
+
         checkGameOver();
         if (changed) {
             setChanged();
@@ -137,7 +138,16 @@ public class Model extends Observable {
      *  Empty spaces are stored as null.
      * */
     public static boolean emptySpaceExists(Board b) {
-        // TODO: Fill in this function.
+        // TODO: Fill in this function
+        // iterate through the rows of the board
+        for (int row = 0; row < b.size(); row++) {
+            // iterate through the columns of the board
+            for (int col = 0; col < b.size(); col++) {
+                if (b.tile(col, row) == null) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -148,6 +158,15 @@ public class Model extends Observable {
      */
     public static boolean maxTileExists(Board b) {
         // TODO: Fill in this function.
+        for (int row = 0; row < b.size(); row++) {
+            // iterate through the columns of the board
+            for (int col = 0; col < b.size(); col++) {
+                if (b.tile(row, col) == null) continue;
+                if (b.tile(row, col).value() == MAX_PIECE) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -159,6 +178,33 @@ public class Model extends Observable {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
+        // If there is empty space, using code from emptySpaceExist()
+        if (emptySpaceExists(b)) {
+            return true;
+        }
+        // Check location UP, DOWN, LEFT or Right for near-by same tiles
+        // 4 directions, LEFT/UP/RIGHT/DOWN
+        int[] dx = {-1, 0, 1, 0};
+        int[] dy = {0, 1, 0, -1};
+
+        int size = b.size();
+        for (int col = 0; col < size; col++) {
+            for (int row = 0; row < size; row++) {
+                // Because we have checked emptySpace, t.values() must exist
+                int curTileValue = b.tile(col, row).value();
+                for (int move = 0; move < 4; move++) {
+                    int colNew = col + dx[move];
+                    int rowNew = row + dy[move];
+                    // make sure the tile is within the boundary
+                    if (colNew > 0 && colNew < size && rowNew > 0 && rowNew < size) {
+                        Tile newTile = b.tile(colNew, rowNew);
+                        if (newTile.value() == curTileValue) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
         return false;
     }
 
